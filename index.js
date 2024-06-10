@@ -3,9 +3,13 @@ const bodyParser = require("body-parser");
 const app = express();
 const path = require("path");
 
+// template engine
+app.set("view engine", "pug");
+app.set('views', 'views')
+
 const rootDir = require("./utils/path");
 
-const adminRoutes = require("./routes/admin");
+const adminData = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const notFoundRoutes = require("./routes/404");
 
@@ -19,7 +23,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(rootDir, "public")));
 
-app.use("/admin", adminRoutes);
+app.use("/admin", adminData.router);
 app.use(shopRoutes);
 app.use(notFoundRoutes);
 
