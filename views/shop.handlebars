@@ -1,0 +1,11 @@
+<h1>Shop from node handlebars js</h1>
+<h2>List of all products</h2>
+{{#if hasProducts}}
+  <ul>
+    {{#each products}}
+      <li>{{this.name}}</li>
+    {{/each}}
+  </ul>
+{{else}}
+  <h3>No products</h3>
+{{/if}}
