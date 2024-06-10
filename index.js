@@ -3,9 +3,11 @@ const bodyParser = require("body-parser");
 const app = express();
 const path = require("path");
 
-// template engine
+// template engine setup
 app.set("view engine", "pug");
-app.set('views', 'views')
+// tell node whre to find our templates (views folder) 
+app.set('views', 'views');
+
 
 const rootDir = require("./utils/path");
 

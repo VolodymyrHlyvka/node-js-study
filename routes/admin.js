@@ -7,7 +7,7 @@ const router = express.Router();
 const products = [];
 
 router.get("/add-product", (_, res) => {
-  res.sendFile(path.join(rootDir, "views", "product-form.html"));
+  res.render("product-form");
 });
 
 router.post("/add-product", (req, res) => {

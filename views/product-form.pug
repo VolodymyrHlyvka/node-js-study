@@ -1,0 +1,13 @@
+extends layout/layout.pug
+block content 
+    form(action="/admin/add-product", method="POST")
+        label(for="name") Name:
+        br 
+        input(type="text", id="name", name="name", value="Car") 
+        br 
+        label(for="price") Price:
+        br 
+        input(type="text", id="price", name="price", value="1500")
+        br 
+        br 
+        input(type="submit", value="Submit")
