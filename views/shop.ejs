@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/index.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul class="flex">
+          <li><a href="/">Home</a></li>
+          <li><a href="/admin/add-product">Add product</a></li>
+        </ul>
+      </nav>
+    </header>
+    <h1>Shop from node ejs js</h1>
+    <h2>List of all products</h2>
+    <% if (products.length > 0) { %> <% for (let product of products) { %>
+    <ul>
+      <li><%= product.name %></li>
+    </ul>
+    <% } %> <% } else { %>
+    <h3>No products found!</h3>
+    <% } %>
+  </body>
+</html>
