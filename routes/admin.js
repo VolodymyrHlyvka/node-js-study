@@ -1,6 +1,6 @@
 const express = require("express");
-const path = require("path");
-const rootDir = require("../utils/path");
+
+const productController = require("../controllers/product");
 
 const router = express.Router();
 
@@ -18,9 +18,7 @@ const router = express.Router();
  *             schema:
  *               type: string
  */
-router.get("/add-product", (_, res) => {
-  res.sendFile(path.join(rootDir, "views", "product-form.html"));
-});
+router.get("/add-product", productController.getAddProduct);
 
 /**
  * @swagger
@@ -45,9 +43,6 @@ router.get("/add-product", (_, res) => {
  *       302:
  *         description: Redirect to the home page
  */
-router.post("/add-product", (req, res) => {
-  console.log(req.body);
-  res.redirect("/");
-});
+router.post("/add-product", productController.addProduct);
 
 module.exports = router;
