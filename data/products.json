@@ -1,14 +1,1 @@
-[
-    {
-        "name": "Car",
-        "price": "1500"
-    },
-    {
-        "name": "Car1",
-        "price": "1900"
-    },
-    {
-        "name": "Car3",
-        "price": "1500"
-    }
-]
+[{"name":"Car","price":"1500"},{"name":"Car1","price":"1900"},{"name":"Car3","price":"1500"},{"name":"car_postman","price":"price_postman"}]

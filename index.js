@@ -9,6 +9,7 @@ const rootDir = require("./utils/path");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const cartRoutes = require("./routes/cart");
 const notFoundRoutes = require("./routes/404");
 
 const hostname = "127.0.0.1";
@@ -26,6 +27,7 @@ app.use(express.static(path.join(rootDir, "public")));
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(cartRoutes);
 app.use(notFoundRoutes);
 
 app.listen(port, hostname, () => {

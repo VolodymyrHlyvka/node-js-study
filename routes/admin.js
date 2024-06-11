@@ -6,23 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /admin/add-product:
- *   get:
- *     summary: Display the add product form
- *     description: Renders an HTML form for adding a new product.
- *     responses:
- *       200:
- *         description: A form to add a product
- *         content:
- *           text/html:
- *             schema:
- *               type: string
- */
-router.get("/add-product", productController.getAddProduct);
-
-/**
- * @swagger
- * /admin/add-product:
+ * /admin/product:
  *   post:
  *     summary: Add a new product
  *     description: Receives form data to add a new product and redirects to the home page.
@@ -43,6 +27,10 @@ router.get("/add-product", productController.getAddProduct);
  *       302:
  *         description: Redirect to the home page
  */
-router.post("/add-product", productController.addProduct);
+router.post("/product", productController.addProduct);
+
+router.put("/product", productController.updateProduct);
+
+router.delete("/product", productController.deleteProduct);
 
 module.exports = router;

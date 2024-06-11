@@ -1,20 +1,15 @@
-const path = require("path");
-
-const rootDir = require("../utils/path");
 const Product = require("../models/product");
-
-exports.getAddProduct = (_, res) => {
-  res.sendFile(path.join(rootDir, "views", "product-form.html"));
-};
 
 exports.addProduct = (req, res) => {
   const product = new Product(req.body.name, req.body.price);
   product.addProduct();
-  res.redirect("/");
+  // res.redirect("/");
+  res.send('Product has been added successfully')
 };
 
-exports.getProducts = (req, res) => {
-  Product.getProducts((products) => {
-    res.send(products);
-  });
+exports.updateProduct = (req, res) => {
+  res.send('updateProduct');
+};
+exports.deleteProduct = (req, res) => {
+  res.send('deleteProduct');
 };
