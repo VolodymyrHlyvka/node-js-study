@@ -7,5 +7,8 @@ exports.getProducts = (req, res) => {
 };
 
 exports.getProduct = (req, res) => {
-  res.send('getProduct');
+  // url - '/product/:id' (req.params.id)
+  Product.getProduct(req.params.id, (product) => {
+    res.send(product);
+  });
 };
