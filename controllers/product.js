@@ -2,9 +2,14 @@ const Product = require("../models/product");
 
 exports.addProduct = (req, res) => {
   const product = new Product(req.body.name, req.body.price);
-  product.addProduct(() => {
-    res.send("Product has been added successfully");
-  });
+  product
+    .addProduct()
+    .then((result) => {
+      res.send(result[0]);
+    })
+    .catch((e) => {
+      console.log("error", e);
+    });
 };
 
 exports.updateProduct = (req, res) => {
@@ -15,7 +20,11 @@ exports.updateProduct = (req, res) => {
 };
 
 exports.deleteProduct = (req, res) => {
-  Product.removeProduct(req.params.id, () => {
-    res.send("Product has been deleted successfully");
-  });
+  Product.removeProduct(req.params.id)
+    .then((result) => {
+      res.send(result[0]);
+    })
+    .catch((e) => {
+      console.log("error", e);
+    });
 };
