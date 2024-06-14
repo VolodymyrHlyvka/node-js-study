@@ -1,7 +1,9 @@
 const Product = require("../models/product");
 
 exports.getProducts = (req, res) => {
-  Product.findAll()
+  req.user
+    .getProducts()
+    // Product.findAll()
     .then((products) => {
       res.send(products);
     })
