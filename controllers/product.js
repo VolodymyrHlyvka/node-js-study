@@ -1,11 +1,15 @@
+const { v4: uuidv4 } = require("uuid");
+
 const Product = require("../models/product");
 
 exports.addProduct = (req, res) => {
-  const product = new Product(req.body.name, req.body.price);
-  product
-    .addProduct()
+  Product.create({
+    id: uuidv4(),
+    name: req.body.name,
+    price: req.body.price,
+  })
     .then((result) => {
-      res.send(result[0]);
+      res.send(result);
     })
     .catch((e) => {
       console.log("error", e);
@@ -20,9 +24,13 @@ exports.updateProduct = (req, res) => {
 };
 
 exports.deleteProduct = (req, res) => {
-  Product.removeProduct(req.params.id)
-    .then((result) => {
-      res.send(result[0]);
+  Product.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then(() => {
+      res.send("Success");
     })
     .catch((e) => {
       console.log("error", e);

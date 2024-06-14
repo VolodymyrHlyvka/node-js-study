@@ -6,6 +6,7 @@ const swaggerUi = require("swagger-ui-express");
 
 const swaggerSpec = require("./swagger");
 const rootDir = require("./utils/path");
+const sequelize = require("./utils/database");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -30,6 +31,13 @@ app.use(shopRoutes);
 app.use(cartRoutes);
 app.use(notFoundRoutes);
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+sequelize
+  .sync()
+  .then((res) => {
+    app.listen(port, hostname, () => {
+      console.log(`Server running at http://${hostname}:${port}/`);
+    });
+  })
+  .catch((err) => {
+    console.log("res", res);
+  });
