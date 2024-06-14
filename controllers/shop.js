@@ -2,8 +2,8 @@ const Product = require("../models/product");
 
 exports.getProducts = (req, res) => {
   Product.findAll()
-    .then((result) => {
-      res.send(result);
+    .then((products) => {
+      res.send(products);
     })
     .catch((e) => {
       console.log("error", e);
@@ -13,8 +13,8 @@ exports.getProducts = (req, res) => {
 exports.getProduct = (req, res) => {
   // url - '/product/:id' (req.params.id)
   Product.findByPk(req.params.id)
-    .then((result) => {
-      res.send(result);
+    .then((product) => {
+      res.send(product);
     })
     .catch((e) => {
       console.log("error", e);
