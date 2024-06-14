@@ -54,9 +54,29 @@ exports.addToCart = (req, res) => {
       console.log("err", err);
     });
 };
+
 exports.updateCart = (req, res) => {
-  res.send("updateCart");
+  const quantity = req.query.quantity;
+  const productId = req.params.id;
+  req.user
+    .getCart()
+    .then((cart) => {
+      userCart = cart;
+      return cart.getProducts({ where: { id: productId } });
+    })
+    .then((products) => {
+      const product = products[0];
+      product.cartItem.quantity = quantity;
+      return product.cartItem.save();
+    })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log("err", err);
+    });
 };
+
 exports.removeFromCart = (req, res) => {
   const productId = req.params.id;
   req.user
