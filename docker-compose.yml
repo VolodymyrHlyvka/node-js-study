@@ -1,15 +1,16 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:8.0
-    container_name: mysql_container
-    environment:
-      MYSQL_ROOT_PASSWORD: admin
+  mongo:
+    image: mongo:latest
+    container_name: mongodb_container
     ports:
-      - "3306:3306"
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
-      - db_data:/var/lib/mysql
+      - mongo-data:/data/db
 
 volumes:
-  db_data:
+  mongo-data:
