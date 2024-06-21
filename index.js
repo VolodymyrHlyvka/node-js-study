@@ -4,6 +4,7 @@ const app = express();
 const path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const swaggerSpec = require("./swagger");
 const rootDir = require("./utils/path");
@@ -16,6 +17,8 @@ const notFoundRoutes = require("./routes/404");
 
 const hostname = "127.0.0.1";
 const port = 8080;
+
+app.use(cors());
 
 // Use Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

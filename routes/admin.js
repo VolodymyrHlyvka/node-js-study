@@ -4,29 +4,49 @@ const productController = require("../controllers/product");
 const userController = require("../controllers/user");
 
 const router = express.Router();
- 
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The product name
+ *         price:
+ *           type: number
+ *           description: The product price
+ *         userId:
+ *           type: string
+ *           description: The ID of the user who added the product
+ */
+
 /**
  * @swagger
  * /admin/product:
  *   post:
  *     summary: Add a new product
- *     description: Receives form data to add a new product and redirects to the home page.
+ *     tags: [Product]
  *     requestBody:
  *       required: true
  *       content:
- *         application/x-www-form-urlencoded:
+ *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The name of the product
- *               price:
- *                 type: string
- *                 description: The price of the product
+ *             $ref: '#/components/schemas/Product'
  *     responses:
- *       302:
- *         description: Redirect to the home page
+ *       200:
+ *         description: The product was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Some server error
  */
 router.post("/product", productController.addProduct);
 
