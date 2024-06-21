@@ -1,7 +1,8 @@
-const User = require("../models/user");
+const Users = require("../models/user");
 
 exports.addUser = (req, res) => {
-  const user = new User(req.body.name, req.body.email);
+  const { name, email } = req.body;
+  const user = new Users({ name, email });
 
   user
     .save()
@@ -14,7 +15,7 @@ exports.addUser = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  User.findByPk(req.params.id)
+  Users.findById(req.params.id)
     .then((user) => {
       res.send(user);
     })

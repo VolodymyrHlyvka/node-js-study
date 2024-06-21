@@ -1,7 +1,11 @@
 const Products = require("../models/product");
 
 exports.getProducts = (req, res) => {
-  Products.fetchAll()
+  Products.find()
+    // select allows us to select which field to select and -[field_name] to exclude
+    .select("name price -_id")
+    // populate allows us to get all info via ref
+    .populate("userId", "name")
     .then((products) => {
       res.send(products);
     })

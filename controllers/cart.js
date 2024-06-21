@@ -1,9 +1,15 @@
-const Product = require("../models/product");
+const Products = require("../models/product");
 
 exports.getCart = (req, res) => {
   const user = req.user;
-  user
-    .getCart()
+  console.log(req.user);
+
+  //TODO: ???
+  req.user
+    .save()
+    .then((result) => {
+      return result.populate("cart.products.productId");
+    })
     .then((result) => {
       res.send(result);
     })
@@ -16,7 +22,7 @@ exports.addToCart = (req, res) => {
   const productId = req.params.id;
   const user = req.user;
 
-  Product.findByPk(productId)
+  Products.findById(productId)
     .then((product) => {
       return user.addToCart(product);
     })
@@ -32,9 +38,9 @@ exports.updateCart = (req, res) => {
   const user = req.user;
   const quantity = req.query.quantity;
   const productId = req.params.id;
-  Product.findByPk(productId)
+  Products.findById(productId)
     .then((product) => {
-      return user.updateCart(product, quantity);
+      return user.addToCart(product, quantity);
     })
     .then((result) => {
       res.send(result);
@@ -47,12 +53,12 @@ exports.updateCart = (req, res) => {
 exports.removeFromCart = (req, res) => {
   const productId = req.params.id;
   const user = req.user;
-  Product.findByPk(productId)
+  Products.findById(productId)
     .then((product) => {
       return user.removeFromCart(product);
     })
-    .then((result) => {
-      res.send(result);
+    .then(() => {
+      res.send("Product has been successfully removed from the cart");
     })
     .catch((e) => {
       console.log("error", e);

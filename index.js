@@ -3,12 +3,11 @@ const bodyParser = require("body-parser");
 const app = express();
 const path = require("path");
 const swaggerUi = require("swagger-ui-express");
+const mongoose = require("mongoose");
 
 const swaggerSpec = require("./swagger");
 const rootDir = require("./utils/path");
-const { mongoConnect } = require("./utils/database");
-
-const User = require("./models/user");
+const Users = require("./models/user");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -30,9 +29,9 @@ app.use(express.static(path.join(rootDir, "public")));
 
 // middleware to add user to each request -  req.user = user
 app.use((req, res, next) => {
-  User.findByPk("66746c42b5e235246249c165")
+  Users.findById("6675a96477806ee04a12c719")
     .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
+      req.user = user;
       next();
     })
     .catch((err) => {
@@ -45,7 +44,7 @@ app.use(shopRoutes);
 app.use(cartRoutes);
 app.use(notFoundRoutes);
 
-mongoConnect(() => {
+mongoose.connect("mongodb://root:example@localhost:27017/").then(() => {
   app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
   });

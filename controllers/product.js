@@ -1,9 +1,8 @@
 const Products = require("../models/product");
 
 exports.addProduct = (req, res) => {
-  const userId = req.user["_id"];
-  const product = new Products(req.body.name, req.body.price, null, userId);
-
+  const { name, price } = req.body;
+  const product = new Products({ name, price, userId: req.user._id });
   product
     .save()
     .then((product) => {
@@ -15,14 +14,15 @@ exports.addProduct = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  // url - '/admin/product?id=66746b890402fda0f5d4df0a'  req.query = { id: '66746b890402fda0f5d4df0a' }
-  Products.findByPk(req.query.id)
+  // url - '/admin/product?id=6675a3b464fe8792ab9f8162'  req.query = { id: '6675a3b464fe8792ab9f8162' }
+  // TODO: remove mock
+  req.body = { name: "new name", price: 1000 };
+  const { name, price } = req.body;
+  Products.findById(req.query.id)
     .then((product) => {
-      const userId = req.user["_id"];
-      const newName = req.body.name;
-      const newPrice = req.body.price;
-      const updateProduct = new Products(newName, newPrice, product["_id"], userId);
-      return updateProduct.save();
+      product.name = name;
+      product.price = price;
+      return product.save();
     })
     .then((product) => {
       res.send(product);
@@ -33,9 +33,9 @@ exports.updateProduct = (req, res) => {
 };
 
 exports.deleteProduct = (req, res) => {
-  Products.deleteById(req.params.id)
+  Products.findByIdAndDelete(req.params.id)
     .then(() => {
-      res.send("Product deleted successfully");
+      res.send("Product has been deleted successfully");
     })
     .catch((e) => {
       console.log("error", e);
