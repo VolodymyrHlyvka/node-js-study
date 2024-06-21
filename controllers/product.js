@@ -1,23 +1,11 @@
-const { v4: uuidv4 } = require("uuid");
+const Products = require("../models/product");
 
-const Product = require("../models/product");
-
-// we register middleware in index.js with additional request field - user
 exports.addProduct = (req, res) => {
-  // first approach via sequelize
-  req.user
-    .createProduct({
-      id: uuidv4(),
-      name: req.body.name,
-      price: req.body.price,
-    })
-    // second approach
-    // Product.create({
-    //   id: uuidv4(),
-    //   name: req.body.name,
-    //   price: req.body.price,
-    //   userId: req.user.id,
-    // })
+  const userId = req.user["_id"];
+  const product = new Products(req.body.name, req.body.price, null, userId);
+
+  product
+    .save()
     .then((product) => {
       res.send(product);
     })
@@ -27,12 +15,14 @@ exports.addProduct = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  // url - 'admin/product' (req.query.id)
-  // url - '/admin/product?id=bc9f9831-428e-4412-92b3-0ded5fae0693'  req.query = { id: 'bc9f9831-428e-4412-92b3-0ded5fae0693' }
-  Product.findByPk(req.query.id)
+  // url - '/admin/product?id=66746b890402fda0f5d4df0a'  req.query = { id: '66746b890402fda0f5d4df0a' }
+  Products.findByPk(req.query.id)
     .then((product) => {
-      product.name = "Car 2";
-      return product.save();
+      const userId = req.user["_id"];
+      const newName = req.body.name;
+      const newPrice = req.body.price;
+      const updateProduct = new Products(newName, newPrice, product["_id"], userId);
+      return updateProduct.save();
     })
     .then((product) => {
       res.send(product);
@@ -43,13 +33,9 @@ exports.updateProduct = (req, res) => {
 };
 
 exports.deleteProduct = (req, res) => {
-  Product.destroy({
-    where: {
-      id: req.params.id,
-    },
-  })
+  Products.deleteById(req.params.id)
     .then(() => {
-      res.send("Success");
+      res.send("Product deleted successfully");
     })
     .catch((e) => {
       console.log("error", e);

@@ -4,7 +4,7 @@ const productController = require("../controllers/product");
 const userController = require("../controllers/user");
 
 const router = express.Router();
-
+ 
 /**
  * @swagger
  * /admin/product:
@@ -35,5 +35,7 @@ router.put("/product", productController.updateProduct);
 router.delete("/product/:id", productController.deleteProduct);
 
 router.post("/user", userController.addUser);
+
+router.get("/user/:id", userController.getUser);
 
 module.exports = router;

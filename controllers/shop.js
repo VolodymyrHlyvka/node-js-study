@@ -1,9 +1,7 @@
-const Product = require("../models/product");
+const Products = require("../models/product");
 
 exports.getProducts = (req, res) => {
-  req.user
-    .getProducts()
-    // Product.findAll()
+  Products.fetchAll()
     .then((products) => {
       res.send(products);
     })
@@ -14,7 +12,7 @@ exports.getProducts = (req, res) => {
 
 exports.getProduct = (req, res) => {
   // url - '/product/:id' (req.params.id)
-  Product.findByPk(req.params.id)
+  Products.findById(req.params.id)
     .then((product) => {
       res.send(product);
     })

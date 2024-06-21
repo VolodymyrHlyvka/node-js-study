@@ -1,13 +1,11 @@
 const Product = require("../models/product");
 
 exports.getCart = (req, res) => {
-  req.user
+  const user = req.user;
+  user
     .getCart()
-    .then((cart) => {
-      return cart.getProducts();
-    })
-    .then((products) => {
-      res.send(products);
+    .then((result) => {
+      res.send(result);
     })
     .catch((e) => {
       console.log("error", e);
@@ -16,82 +14,47 @@ exports.getCart = (req, res) => {
 
 exports.addToCart = (req, res) => {
   const productId = req.params.id;
-  let userCart;
-  let quantity = 1;
-  req.user
-    .getCart()
-    .then((cart) => {
-      if (!cart) {
-        return req.user.createCart();
-      }
-      return cart;
-    })
-    .then((cart) => {
-      userCart = cart;
-      return cart.getProducts({ where: { id: productId } });
-    })
-    .then((products) => {
-      let product;
-      if (products.length) {
-        product = products[0];
-      }
-      if (product) {
-        quantity = product.cartItem.quantity + 1;
-        return product;
-      }
+  const user = req.user;
 
-      return Product.findByPk(productId);
-    })
+  Product.findByPk(productId)
     .then((product) => {
-      return userCart.addProduct(product, {
-        through: { quantity },
-      });
+      return user.addToCart(product);
     })
     .then((result) => {
       res.send(result);
     })
-    .catch((err) => {
-      console.log("err", err);
+    .catch((e) => {
+      console.log("error", e);
     });
 };
 
 exports.updateCart = (req, res) => {
+  const user = req.user;
   const quantity = req.query.quantity;
   const productId = req.params.id;
-  req.user
-    .getCart()
-    .then((cart) => {
-      userCart = cart;
-      return cart.getProducts({ where: { id: productId } });
-    })
-    .then((products) => {
-      const product = products[0];
-      product.cartItem.quantity = quantity;
-      return product.cartItem.save();
+  Product.findByPk(productId)
+    .then((product) => {
+      return user.updateCart(product, quantity);
     })
     .then((result) => {
       res.send(result);
     })
-    .catch((err) => {
-      console.log("err", err);
+    .catch((e) => {
+      console.log("error", e);
     });
 };
 
 exports.removeFromCart = (req, res) => {
   const productId = req.params.id;
-  req.user
-    .getCart()
-    .then((cart) => {
-      return cart.getProducts({ where: { id: productId } });
-    })
-    .then((products) => {
-      const product = products[0];
-      product.cartItem.destroy();
+  const user = req.user;
+  Product.findByPk(productId)
+    .then((product) => {
+      return user.removeFromCart(product);
     })
     .then((result) => {
       res.send(result);
     })
-    .catch((err) => {
-      console.log("err", err);
+    .catch((e) => {
+      console.log("error", e);
     });
 };

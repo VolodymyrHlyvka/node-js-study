@@ -6,11 +6,13 @@ const swaggerUi = require("swagger-ui-express");
 
 const swaggerSpec = require("./swagger");
 const rootDir = require("./utils/path");
-const mongoConnect = require("./utils/database");
+const { mongoConnect } = require("./utils/database");
 
-// const adminRoutes = require("./routes/admin");
-// const shopRoutes = require("./routes/shop");
-// const cartRoutes = require("./routes/cart");
+const User = require("./models/user");
+
+const adminRoutes = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
+const cartRoutes = require("./routes/cart");
 const notFoundRoutes = require("./routes/404");
 
 const hostname = "127.0.0.1";
@@ -26,12 +28,24 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(rootDir, "public")));
 
-// app.use("/admin", adminRoutes);
-// app.use(shopRoutes);
-// app.use(cartRoutes);
+// middleware to add user to each request -  req.user = user
+app.use((req, res, next) => {
+  User.findByPk("66746c42b5e235246249c165")
+    .then((user) => {
+      req.user = new User(user.name, user.email, user.cart, user._id);
+      next();
+    })
+    .catch((err) => {
+      console.log("err", err);
+    });
+});
+
+app.use("/admin", adminRoutes);
+app.use(shopRoutes);
+app.use(cartRoutes);
 app.use(notFoundRoutes);
 
-mongoConnect((client) => {
+mongoConnect(() => {
   app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
   });
