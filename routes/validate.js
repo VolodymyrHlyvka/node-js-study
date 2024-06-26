@@ -73,14 +73,13 @@ router.post("/", (req, res) => {
           const message = new Messages({
             message: text,
             ...getStructure(response),
-            // type: response.data.attributeScores["TOXICITY"].summaryScore.type,
             userId: req.user._id,
           });
 
           message
             .save()
             .then((message) => {
-              res.send(response.data);
+              res.send(message);
             })
             .catch((e) => {
               console.log("error", e);
