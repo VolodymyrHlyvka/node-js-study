@@ -5,6 +5,8 @@ const path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 const swaggerSpec = require("./swagger");
 const rootDir = require("./utils/path");
@@ -13,12 +15,21 @@ const Users = require("./models/user");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const cartRoutes = require("./routes/cart");
+const authRoutes = require("./routes/auth");
 const notFoundRoutes = require("./routes/404");
 
 const hostname = "127.0.0.1";
 const port = 8080;
 
 app.use(cors());
+app.use(cookieParser());
+app.use(
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 // Use Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -42,6 +53,7 @@ app.use((req, res, next) => {
     });
 });
 
+app.use(authRoutes);
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(cartRoutes);
