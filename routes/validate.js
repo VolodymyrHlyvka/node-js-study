@@ -2,25 +2,12 @@ const express = require("express");
 const { google } = require("googleapis");
 
 const Messages = require("../models/message");
+const { getKey } = require("../utils/keys");
 
 const router = express.Router();
 
-const getKey = (key) => {
-  switch (key) {
-    case "TOXICITY":
-      return "toxicity";
-    case "SEVERE_TOXICITY":
-      return "severeToxisity";
-    case "IDENTITY_ATTACK":
-      return "identityAttack";
-    case "INSULT":
-      return "insult";
-    case "PROFANITY":
-      return "profanity";
-    case "THREAT":
-      return "threat";
-  }
-};
+const DISCOVERY_URL = process.env.DISCOVERY_URL;
+const PERSPECTIVE_API_KEY = process.env.PERSPECTIVE_API_KEY;
 
 router.post("/", (req, res) => {
   const requestParams = req.query;
@@ -56,11 +43,11 @@ router.post("/", (req, res) => {
   };
 
   google
-    .discoverAPI(process.env.DISCOVERY_URL)
+    .discoverAPI(DISCOVERY_URL)
     .then((client) => {
       client.comments.analyze(
         {
-          key: process.env.PERSPECTIVE_API_KEY,
+          key: PERSPECTIVE_API_KEY,
           resource: {
             comment: { text },
             languages: ["en"],

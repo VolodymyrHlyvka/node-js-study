@@ -10,6 +10,8 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const cartRoutes = require("./routes/cart");
 const validateRoutes = require("./routes/validate");
+// const { subscribeToIg } = require("./routes/ig_webhook");
+
 const notFoundRoutes = require("./routes/404");
 
 const hostname = "127.0.0.1";
@@ -39,5 +41,6 @@ app.use(notFoundRoutes);
 mongoose.connect(process.env.MONGODB_PATH).then(() => {
   app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
+    // subscribeToIg();
   });
 });
