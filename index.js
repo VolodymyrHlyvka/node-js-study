@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+require("dotenv").config();
 
 const swaggerSpec = require("./swagger");
 const rootDir = require("./utils/path");
@@ -21,13 +23,24 @@ const notFoundRoutes = require("./routes/404");
 const hostname = "127.0.0.1";
 const port = 8080;
 
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_PATH,
+  collection: "mySessions",
+});
+
+// Catch errors
+store.on("error", function (error) {
+  console.log(error);
+});
+
 app.use(cors());
 app.use(cookieParser());
 app.use(
   session({
-    secret: "my secret",
+    secret: process.env.SESSION_KEY,
     resave: false,
     saveUninitialized: false,
+    store: store,
   })
 );
 
@@ -59,7 +72,7 @@ app.use(shopRoutes);
 app.use(cartRoutes);
 app.use(notFoundRoutes);
 
-mongoose.connect("mongodb://root:example@localhost:27017/").then(() => {
+mongoose.connect(process.env.MONGODB_PATH).then(() => {
   app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
   });

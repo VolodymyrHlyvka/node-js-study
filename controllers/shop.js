@@ -1,7 +1,8 @@
 const Products = require("../models/product");
 
 exports.getProducts = (req, res) => {
-  const isLoggedIn = req.cookies["loggedIn"];
+  // const isLoggedIn = req.cookies["loggedIn"];
+  const isLoggedIn = req.session.isLogged;
   if (isLoggedIn) {
     Products.find()
       // select allows us to select which field to select and -[field_name] to exclude

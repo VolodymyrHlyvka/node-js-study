@@ -1,10 +1,12 @@
 exports.login = (req, res) => {
-  res
-    .cookie("loggedIn", "true", { maxAge: 900000, httpOnly: true })
-    .send(req.user);
+  //   res
+  //     .cookie("loggedIn", "true", { maxAge: 900000, httpOnly: true })
+  req.session.isLogged = true;
+  req.session.user = req.user;
+  res.send(req.user);
 };
 
 exports.logout = (req, res) => {
-  const isLogged = false;
-  res.send(req.user);
+  req.session.destroy();
+  res.send('User has been successfully logout');
 };
