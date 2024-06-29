@@ -1,5 +1,6 @@
-const Users = require("../models/user");
 const bcrypt = require("bcryptjs");
+
+const Users = require("../models/user");
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
@@ -12,6 +13,7 @@ exports.login = (req, res) => {
             if (doMatch) {
               req.session.isLogged = true;
               req.session.user = user;
+              res.cookie("XSRF-TOKEN", req.csrfToken());
               return req.session.save(() => {
                 res.send(user);
               });
@@ -55,6 +57,16 @@ exports.register = (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  req.session.destroy();
-  res.send("User has been successfully logout");
+  // to work with csrf we should add _csrf input into our request (input type="hidden" name="_csrf" value={req.csrfToken()})
+  // or X-XSRF-TOKEN header with value={req.csrfToken()}
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send("Failed to destroy session");
+    }
+
+    // Clear the cookie from the client side
+    res.clearCookie("connect.sid", { path: "/" });
+    res.clearCookie("XSRF-TOKEN", { path: "/" });
+    res.send("User has been successfully logged out");
+  });
 };

@@ -1,7 +1,11 @@
 const express = require("express");
+
 const cartController = require("../controllers/cart");
+const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
+
+router.use(isAuth);
 
 router.get("/cart", cartController.getCart);
 
