@@ -19,7 +19,7 @@ exports.login = (req, res) => {
               const { password, ...userWithoutPassword } = user.toObject();
               const accessToken = generateAccessToken(userWithoutPassword);
               const refreshToken = generateRefreshToken(userWithoutPassword);
-              res.send({ accessToken, refreshToken });
+              return res.send({ accessToken, refreshToken });
             }
             return res.send("Email or password are incorrect");
           })
