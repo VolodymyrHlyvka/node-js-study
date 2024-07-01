@@ -1,22 +1,25 @@
 const bcrypt = require("bcryptjs");
 
 const Users = require("../models/user");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../controllers/jwt-token");
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
   Users.findOne({ email })
+    .select("_id email password")
     .then((user) => {
       if (user) {
         return bcrypt
           .compare(password, user.password)
           .then((doMatch) => {
             if (doMatch) {
-              req.session.isLogged = true;
-              req.session.user = user;
-              res.cookie("XSRF-TOKEN", req.csrfToken());
-              return req.session.save(() => {
-                res.send(user);
-              });
+              const { password, ...userWithoutPassword } = user.toObject();
+              const accessToken = generateAccessToken(userWithoutPassword);
+              const refreshToken = generateRefreshToken(userWithoutPassword);
+              res.send({ accessToken, refreshToken });
             }
             return res.send("Email or password are incorrect");
           })
@@ -66,7 +69,17 @@ exports.logout = (req, res) => {
 
     // Clear the cookie from the client side
     res.clearCookie("connect.sid", { path: "/" });
-    res.clearCookie("XSRF-TOKEN", { path: "/" });
     res.send("User has been successfully logged out");
+  });
+};
+
+exports.token = (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    const accessToken = jwt.generateAccessToken(user);
+    res.json({ accessToken });
   });
 };

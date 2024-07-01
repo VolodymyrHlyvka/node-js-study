@@ -3,14 +3,11 @@ const { google } = require("googleapis");
 
 const Messages = require("../models/message");
 const { getKey } = require("../utils/keys");
-const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
 
 const DISCOVERY_URL = process.env.DISCOVERY_URL;
 const PERSPECTIVE_API_KEY = process.env.PERSPECTIVE_API_KEY;
-
-router.use(isAuth);
 
 router.post("/", (req, res) => {
   const requestParams = req.query;

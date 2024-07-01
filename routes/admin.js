@@ -2,11 +2,9 @@ const express = require("express");
 
 const productController = require("../controllers/product");
 const userController = require("../controllers/user");
-const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
 
-router.use(isAuth);
 
 /**
  * @swagger
