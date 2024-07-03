@@ -11,7 +11,7 @@ const authRoutes = require("./routes/auth");
 // const { subscribeToIg } = require("./routes/ig_webhook");
 const notFoundRoutes = require("./routes/404");
 
-const hostname = "127.0.0.1";
+const hostname = process.env.HOST_PATH;
 const port = 8080;
 
 app.use(_configs);
