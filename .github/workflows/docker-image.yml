@@ -50,7 +50,7 @@ jobs:
       - name: Invoke SSM Document
         run: |
           aws ssm send-command --document-name "PullAndRunDockerImage" \
-                               --instance-ids "i-0658e2c649997b142" \
+                               --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
                                --comment "Deploy Docker image to EC2"
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}

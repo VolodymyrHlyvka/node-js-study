@@ -26,7 +26,5 @@ app.use(notFoundRoutes);
 mongoose.connect(process.env.MONGODB_PATH).then(() => {
   app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
-    console.log("check deploy");
-    // subscribeToIg();
   });
 });
