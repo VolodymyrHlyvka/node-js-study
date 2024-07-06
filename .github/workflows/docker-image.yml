@@ -1,0 +1,38 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [node-perspective-api]
+  pull_request:
+    branches: [node-perspective-api]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image
+        id: build-image
+        run: |
+          REPOSITORY_URI=992382566288.dkr.ecr.eu-north-1.amazonaws.com/node-express-server
+          IMAGE_TAG=latest
+
+          docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+          docker push $REPOSITORY_URI:$IMAGE_TAG
+
+      - name: Post Docker image details
+        run: |
+          echo "Image URI: ${{ steps.build-image.outputs.image }}"
