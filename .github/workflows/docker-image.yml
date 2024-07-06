@@ -34,10 +34,13 @@ jobs:
       - name: Build and push Docker image
         id: build-image
         run: |
-          REPOSITORY_URI= ${{ secrets.ECR_REPOSITORY  }}
+          REPOSITORY_URI=${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG=latest
 
+          echo "Building Docker image..."
           docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+
+          echo "Pushing Docker image to ECR..."
           docker push $REPOSITORY_URI:$IMAGE_TAG
 
       - name: Post Docker image details
