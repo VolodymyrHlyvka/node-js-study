@@ -1,5 +1,9 @@
 /node_modules
 /.vscode
 /aws
+/.terraform
+
+plan.out
+terraform.tfstate.backup
 
 .env
