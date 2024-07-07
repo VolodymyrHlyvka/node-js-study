@@ -77,7 +77,7 @@ jobs:
       - name: Update MongoDB container
         run: |
           aws ssm send-command --document-name "UpdateMongoDockerImage" \
-                               --targets "Key=instanceIds,Values=$(terraform output instance_id)" \
+                               --targets '[{"Key":"instanceIds","Values":["$(terraform output -raw instance_id)"]}]' \
                                --comment "Update MongoDB Docker container" \
 
         env:
