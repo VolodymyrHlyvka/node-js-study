@@ -21,6 +21,32 @@ resource "aws_instance" "terraform-mongo-instance" {
               EOF
 }
 
+resource "aws_ssm_document" "update_mongo" {
+  name          = "UpdateMongoDockerImage"
+  document_type = "Command"
+
+  content = <<-DOC
+    {
+      "schemaVersion": "2.2",
+      "description": "Pull the latest MongoDB Docker image and restart the container",
+      "mainSteps": [
+        {
+          "action": "aws:runShellScript",
+          "name": "updateMongoImage",
+          "inputs": {
+            "runCommand": [
+              "docker pull mongo:latest",
+              "docker stop mongodb",
+              "docker rm mongodb",
+              "docker run -d -p 27017:27017 --name mongodb -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example mongo:latest"
+            ]
+          }
+        }
+      ]
+    }
+  DOC
+}
+
 
 output "ec2_instance_id" {
   value = aws_instance.terraform-mongo-instance.id
