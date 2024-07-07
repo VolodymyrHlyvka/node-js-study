@@ -74,10 +74,14 @@ jobs:
         run: |
           echo "EC2 Instance ID: $(terraform output instance_id)"
 
+      - name: Get EC2 Instance ID
+        id: get-instance-id
+        run: echo "EC2_INSTANCE_ID=$(terraform output -raw instance_id)" >> $GITHUB_ENV
+
       - name: Update MongoDB container
         run: |
           aws ssm send-command --document-name "UpdateMongoDockerImage" \
-                               --targets '[{"Key":"instanceIds","Values":["$(terraform output -raw instance_id)"]}]' \
+                               --targets '[{"Key":"instanceIds","Values":["${{ env.EC2_INSTANCE_ID }}"]}]' \
                                --comment "Update MongoDB Docker container" \
 
         env:
