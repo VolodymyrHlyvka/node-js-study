@@ -45,6 +45,9 @@ resource "aws_ssm_document" "update_mongo" {
       ]
     }
   DOC
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 
